@@ -202,6 +202,13 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details.
 $ make build
 ```
 
+### End To End Testing
+
+The end to end test can be run by simply running `make test-e2e`.
+To run the test, you need to have the [consul binary](https://releases.hashicorp.com/consul/) available in your path.
+It simulates a create, update, and delete of consul KV pairs and confirms every operation is successful.
+The test data is stored within this repo so developers do not have to setup an external repo to test.
+
 ### Releases
 This project is using [goreleaser](https://goreleaser.com). GitHub release creation is automated using Travis
 CI. New releases are automatically created when new tags are pushed to the repo.
