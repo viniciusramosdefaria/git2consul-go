@@ -112,34 +112,6 @@ func TestE2E(t *testing.T) {
 	} else {
 		t.Log("confirmed e2e/master/genre was properly updated")
 	}
-
-	// TODO: remove delete when issue #31 is resolved this is a workaround because if
-	// the ref matches the current commit, the kv pairs will not be updated
-	_, err = kv.Delete("e2e/master.ref", nil)
-	if err != nil {
-		t.Fatal("failed to delete git reference")
-	}
-
-	g2cCmd = exec.Command(projectDir+"/git2consul",
-		"-config",
-		projectDir+"/pkg/e2e/data/delete-config.json",
-		"-debug",
-		"-once")
-	err = executeCommand(g2cCmd, "Terminating git2consul")
-	if err != nil {
-		t.Fatal("git2consul run failed", err)
-	} else {
-		t.Log("git2consul ran successfully")
-	}
-	pair, _, err = kv.Get("e2e/master/genre", nil)
-	if err != nil {
-		t.Fatal("failed trying to get pair /e2e/master/genre", err)
-	}
-	if pair != nil {
-		t.Error("e2e/master/genre exists when it should have been deleted")
-	} else {
-		t.Log("confirmed genre was deleted")
-	}
 }
 
 func executeCommand(command *exec.Cmd, expectedLog string) (err error) {
