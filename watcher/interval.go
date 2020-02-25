@@ -48,7 +48,7 @@ func (w *Watcher) pollByInterval(repo repository.Repo, wg *sync.WaitGroup) {
 		return
 	}
 
-	ticker := time.NewTicker(interval * time.Second)
+	ticker := time.NewTicker(time.Duration(1) * time.Second)
 	defer ticker.Stop()
 
 	// Polling error should not stop polling by interval

@@ -1,0 +1,13 @@
+{
+  "repos": [
+    {
+      "name": "values",
+      "url": "https://github.com/viniciusramosdefaria/consul-values.git"
+    },
+    {
+      "name": "template",
+      "url": "https://github.com/viniciusramosdefaria/consul-template.git",
+      "template_repo": true
+    }
+  ]
+}

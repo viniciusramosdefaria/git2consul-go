@@ -76,10 +76,19 @@ func (f *TextFile) GetPath() string {
 }
 
 //Create function creates the KV store entries based on the file content.
+//Change this
 func (f *TextFile) Create(kv Handler, repo repository.Repo) error {
 	content, err := getContent(f)
 	if err != nil {
 		return err
+	}
+
+	if repo.GetConfig().TemplateRepo == true {
+		//log.Print(content)
+		//cmd := exec.Command("/home/vinicius/Download/consul-template","-template", f.GetPath()+":"+f.GetPath()+"-eval", "-once")
+		//cmd.Start()
+		//log.Print(cmd.Stderr)
+		return nil
 	}
 	err = kv.PutKV(repo, f.path, content)
 	if err != nil {

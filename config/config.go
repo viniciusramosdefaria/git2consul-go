@@ -55,6 +55,7 @@ type Repo struct {
 	SkipBranchName bool        `json:"skip_branch_name,omitempty"`
 	SkipRepoName   bool        `json:"skip_repo_name,omitempty"`
 	Credentials    Credentials `json:"credentials,omitempty"`
+	TemplateRepo   bool			`json:"template_repo,omitempty"`
 }
 
 // Config is used to represent the passed in configuration
