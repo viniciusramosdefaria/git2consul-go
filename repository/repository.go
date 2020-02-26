@@ -49,6 +49,7 @@ type Repo interface {
 	Branch() plumbing.ReferenceName
 	GetConfig() *config.Repo
 	GetStorer() storage.Storer
+	Template() bool
 	ResolveRevision(plumbing.Revision) (*plumbing.Hash, error)
 }
 
@@ -76,6 +77,10 @@ func (r *Repository) GetConfig() *config.Repo {
 // GetStorer returns Storer
 func (r *Repository) GetStorer() storage.Storer {
 	return r.Storer
+}
+
+func (r *Repository) Template() bool {
+	return r.Config.TemplateRepo
 }
 
 // Name returns the repository name

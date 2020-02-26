@@ -18,6 +18,9 @@ package kv
 
 import (
 	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -76,19 +79,52 @@ func (f *TextFile) GetPath() string {
 }
 
 //Create function creates the KV store entries based on the file content.
-//Change this
 func (f *TextFile) Create(kv Handler, repo repository.Repo) error {
 	content, err := getContent(f)
+
+	log.Print(string(content))
+
 	if err != nil {
 		return err
 	}
 
-	if repo.GetConfig().TemplateRepo == true {
-		//log.Print(content)
-		//cmd := exec.Command("/home/vinicius/Download/consul-template","-template", f.GetPath()+":"+f.GetPath()+"-eval", "-once")
-		//cmd.Start()
-		//log.Print(cmd.Stderr)
-		return nil
+	if repo.Template() == true {
+
+		tmpFileInput, err := ioutil.TempFile(os.TempDir(), "pre-")
+		if err != nil {
+			log.Println("Cannot create temporary file", err)
+		}
+
+		tmpFileOutput, err := ioutil.TempFile(os.TempDir(), "post-")
+		if err != nil {
+			log.Println("Cannot create temporary file", err)
+		}
+
+		defer os.Remove(tmpFileInput.Name())
+		defer os.Remove(tmpFileOutput.Name())
+
+		log.Println("Created a Temp File: " + tmpFileInput.Name())
+		log.Println("Created a Temp File: " + tmpFileOutput.Name())
+
+		text := content
+
+		if _, err = tmpFileInput.Write(text); err != nil {
+			log.Println("Failed to write to temporary file", err)
+		}
+
+		cmd := exec.Command("/home/vinicius/Downloads/consul-template","-template", tmpFileInput.Name()+":"+tmpFileOutput.Name(), "-once")
+		stdout, err := cmd.Output()
+
+		if err != nil {
+			log.Print(stdout, err.Error())
+			return nil
+		}
+
+		content , err = ioutil.ReadFile(tmpFileOutput.Name())
+		if err != nil {
+			log.Print("Unable to set content")
+		}
+
 	}
 	err = kv.PutKV(repo, f.path, content)
 	if err != nil {
